@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useTelemetry } from "../telemetry/TelemetryProvider";
 
 export default function ProjectCard({ project }) {
     const { slug, title, summary, highlights = [], tech = [], cta } = project;
     const { theme } = useTheme();
+    const { trackClick } = useTelemetry();
     
     if (!slug) {
         return null;
@@ -25,6 +27,7 @@ export default function ProjectCard({ project }) {
         >
             <Link
                 to={`/projects/${slug}`}
+                onClick={() => trackClick(`Project Card: ${title}`, { projectSlug: slug })}
                 className="block p-6 md:p-8 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 dark:focus:ring-offset-slate-800 rounded-2xl"
             >
                 <div className="flex flex-col gap-6">

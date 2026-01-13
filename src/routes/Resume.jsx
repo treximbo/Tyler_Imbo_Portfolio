@@ -1,7 +1,9 @@
 import { useTheme } from "../context/ThemeContext";
+import { useTelemetry } from "../telemetry/TelemetryProvider";
 
 export default function Resume() {
     const { theme } = useTheme();
+    const { trackClick } = useTelemetry();
     
     return (
         <section className="mx-auto max-w-7xl px-[clamp(1rem,4vw,2rem)] py-12 md:py-16 lg:py-20">
@@ -331,6 +333,7 @@ export default function Resume() {
             <a
                 href="/Resume 2026.pdf"
                 download="Tyler_Imbo_Resume_2026.pdf"
+                onClick={() => trackClick('Resume Download', { type: 'outbound', file: 'Resume 2026.pdf' })}
                 className="fab-button fixed bottom-8 right-8 z-50 flex items-center rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 overflow-hidden"
                 style={{
                     width: '56px',

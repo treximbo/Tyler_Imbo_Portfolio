@@ -1,14 +1,17 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useTelemetry } from "../telemetry/TelemetryProvider";
 
 function NavItem({to, children}) {
     const { theme } = useTheme();
+    const { trackClick } = useTelemetry();
     const location = useLocation();
     const isActive = location.pathname === to;
     
     return (
         <NavLink
         to={to}
+        onClick={() => trackClick(`Nav: ${children}`)}
         className="rounded-lg px-4 py-2 text-sm font-medium transition-colors duration-200"
         style={{
             backgroundColor: isActive ? (theme === 'dark' ? '#3b82f6' : '#2563eb') : 'transparent',

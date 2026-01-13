@@ -1,8 +1,20 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import { useTelemetry } from "../telemetry/TelemetryProvider";
 
 export default function Home() {
     const { theme } = useTheme();
+    const { record, trackClick } = useTelemetry();
+    
+    // Example: Record a custom event when Home component mounts
+    useEffect(() => {
+        record({ 
+            type: 'page_view', 
+            page: 'home',
+            message: 'Home page viewed'
+        });
+    }, [record]);
     
     return (
         <section className="mx-auto max-w-7xl px-[clamp(1rem,4vw,2rem)] py-16 md:py-24 lg:py-32">
@@ -36,6 +48,7 @@ export default function Home() {
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-10">
                     <Link
                         to="/projects"
+                        onClick={() => trackClick('CTA: View Projects')}
                         className="inline-flex items-center justify-center px-6 py-3 text-base font-medium text-white rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-colors duration-200"
                         style={{
                             backgroundColor: theme === 'dark' ? '#3b82f6' : '#2563eb',
@@ -52,6 +65,7 @@ export default function Home() {
                     </Link>
                     <Link
                         to="/about"
+                        onClick={() => trackClick('CTA: Learn More')}
                         className="inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 transition-colors duration-200"
                         style={{
                             backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',

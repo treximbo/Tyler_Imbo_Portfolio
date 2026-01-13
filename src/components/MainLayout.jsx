@@ -1,10 +1,18 @@
 import { Outlet, Link } from "react-router-dom";
 import Navigation from "./Navigation";
 import DarkModeToggle from "./DarkModeToggle";
+import TelemetryToggle from "./TelemetryToggle";
+import TelemetryPanel from "./TelemetryPanel";
 import { useTheme } from "../context/ThemeContext";
+import { useTelemetry } from "../telemetry/TelemetryProvider";
+import { useRouteTracking } from "../telemetry/useRouteTracking";
+import { useScrollDepth } from "../telemetry/useScrollDepth";
 
 export default function MainLayout() {
     const { theme } = useTheme();
+    const { trackClick } = useTelemetry();
+    useRouteTracking();
+    useScrollDepth();
     
     // Backup inline styles if Tailwind dark mode isn't working
     const backgroundColor = theme === 'dark' ? '#0f172a' : '#f8fafc';
@@ -29,6 +37,7 @@ export default function MainLayout() {
                     <div className="flex items-center justify-between py-4 md:py-5">
                         <Link 
                             to="/"
+                            onClick={() => trackClick('Nav: Home Logo')}
                             className="text-xl md:text-2xl font-bold hover:text-blue-600 transition-colors duration-200 focus:outline-none"
                             style={{
                                 color: theme === 'dark' ? '#ffffff' : '#0f172a',
@@ -53,6 +62,9 @@ export default function MainLayout() {
             <main>
                 <Outlet />
             </main>
+
+            <TelemetryPanel />
+            <TelemetryToggle />
 
             <footer 
                 className="border-t py-8 transition-colors duration-300"
